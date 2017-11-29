@@ -1,0 +1,25 @@
+{	
+	"width": 1080,
+	"height": 720,
+	
+	"board": {
+		"x": 0,
+		"y": 11
+	},
+
+	"score": {
+		"currentText": {"x": 1000, "y": 115},
+		"multiplierText": {"x": 1000, "y": 195}
+	},
+
+	"panel": {
+		"sound": {"x": 77, "y": 50},
+		"restart": {"x": 70, "y": 160},
+		"fullScreen": {"x": 78, "y": 530},
+		"info": {"x": 77, "y": 630}
+	},
+
+	"tutorial": {
+		"text": {"x": 210, "y": 200}
+	}
+}

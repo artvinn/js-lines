@@ -69,6 +69,7 @@ class Game extends Engine {
 		this.ballsController.events.on('showPopup', (color) => this.showPopup(color));
 		this.ballsController.events.on('updateScore', (data) => this.updateScore(data));
 		this.ballsController.events.on('gameOver', () => this.gameOver());
+		this.ballsController.events.on('resetMultiplier', () => this.score.resetMultiplier());
 
 		this.gameOverComp.events.on('restart', () => this.restart());
 

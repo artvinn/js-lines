@@ -220,13 +220,16 @@ export default class BallsController {
 		this._blowMatchingBalls()
 
 		if (this._blowedUp) {
+			this._shouldMultiply = true;
 			setTimeout(() => {
 				this.deselectCurrentBall();
 				this._moving = false;
 			}, 300)
 		} else {
+			this._shouldMultiply = false;
 			this.deselectCurrentBall();
 			this._moving = false;
+			this.events.emit("resetMultiplier");
 		}
 
 		setTimeout(() => {
@@ -309,7 +312,8 @@ export default class BallsController {
 			}
 			this.events.emit('updateScore', {
 				balls: toRemove.length, 
-				color: toRemove[0].color
+				color: toRemove[0].color,
+				incrementMultiplier: this._shouldMultiply
 			});
 		}
 	}

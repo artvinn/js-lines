@@ -8,10 +8,9 @@ export default class Score {
 
 		this._currentText = null;
 		this._multiplierText = null;
+		this._addedScoreText = null;
 		this._currentScore = 0;
 		this._multiplier = 0;
-		this._lastColor = null;
-
 		this._scrollTween = null;
 	}
 
@@ -24,7 +23,7 @@ export default class Score {
 
 	_initTexts() {
 		const color = this._randomColor();
-		this._currentText = new PIXI.extras.BitmapText("0", {font: "95px scoreFont"});
+		this._currentText = new PIXI.extras.BitmapText("0", {font: "90px scoreFont"});
 		this._currentText.tint = color;
 		this._currentText.anchor.set(0.5);
 		this._content.addChild(this._currentText);
@@ -33,25 +32,60 @@ export default class Score {
 		this._multiplierText.tint = color;
 		this._multiplierText.anchor.set(0.5);
 		this._content.addChild(this._multiplierText);
+
+		this._addedScoreText = new PIXI.extras.BitmapText("", { font: "42px scoreFont"});
+		this._addedScoreText.tint = color;
+		this._addedScoreText.anchor.set(0.5);
+		this._addedScoreText.alpha = 0;
+		this._content.addChild(this._addedScoreText);
 	}
 
 	update(data) {
-		const {color, balls} = data;
+		const {color, balls, incrementMultiplier} = data;
 		const hexColor = parseInt(Meow.cache.getJSON('config')['balls']['colors'][color]);
 		this._currentText.tint = hexColor;
 		this._currentText.text = this._currentScore + '';
 
-		if (this._lastColor === color)
-			this._multiplier+=this._multiplier;
+		if (incrementMultiplier)
+			this._multiplier += this._multiplier;
 		else
-			this._multiplier = 1;
+			this.resetMultiplier();
 
 		this._multiplierText.tint = hexColor;
 		this._multiplierText.text = `x${this._multiplier}`;
-		this._lastColor = color;
 
-		const newScore = this._currentScore + (balls * 55) * this._multiplier;
-		this._animate(newScore);
+		const addedScore = (balls * 55) * this._multiplier;
+
+		this._addedScoreText.tint = hexColor;
+		this._addedScoreText.text = `+${addedScore}`;
+		this._animate(this._currentScore + addedScore);
+		this._animateAddedScore();
+	}
+
+	resetMultiplier() {
+		this._multiplier = 1;
+		this._multiplierText.text = "x1";
+	}
+
+	_animateAddedScore() {
+		const self = this;
+		this._addedScoreText.alpha = 1;
+		this._addedScoreText.x = this._currentText.x;
+		this._addedScoreText.y = this._currentText.y - this._currentText.height / 2;
+
+		new TWEEN.Tween({y: this._addedScoreText.y})
+			.to({y: this._addedScoreText.y - 30}, 600)
+			.onUpdate(function() {
+				self._addedScoreText.y = this.y;
+			})
+			.start();
+
+		new TWEEN.Tween({alpha: 1})
+			.to({alpha: 0}, 1000)
+			.onUpdate(function() {
+				self._addedScoreText.alpha = this.alpha
+			})
+			.start();
 	}
 
 	_animate(newScore) {
@@ -83,8 +117,6 @@ export default class Score {
 		this._currentText.text = '0';
 
 		this._currentScore = 0;
-
-		this._lastColor = null;
 	}
 
 	checkBestScore() {

@@ -46,12 +46,6 @@ export default class Panel {
 		this._info.mousedown = () => this.events.emit('showInfo');
 		this._info.touchstart = () => this.events.emit('showInfo');
 		this.content.addChild(this._info);
-
-		this._fullScreenButton = new PIXI.Sprite(Meow.cache.getTexture('fullscreen.png'));
-		this._fullScreenButton.interactive = true;
-		this._fullScreenButton.mousedown = () => this._toggleFullScreen();
-		this._fullScreenButton.touchstart = () => this._toggleFullScreen();
-		this.content.addChild(this._fullScreenButton);
 	}
 
 	_toggleSound() {
@@ -78,27 +72,6 @@ export default class Panel {
 		this._soundButton.interactive = false;
 	}
 
-	_toggleFullScreen() {
-		if (!document.fullscreenElement &&    // alternative standard method
-	      !document.mozFullScreenElement && !document.webkitFullscreenElement) {  // current working methods
-	    if (document.documentElement.requestFullscreen) {
-	      document.documentElement.requestFullscreen();
-	    } else if (document.documentElement.mozRequestFullScreen) {
-	      document.documentElement.mozRequestFullScreen();
-	    } else if (document.documentElement.webkitRequestFullscreen) {
-	      document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
-	    }
-	  } else {
-	    if (document.cancelFullScreen) {
-	      document.cancelFullScreen();
-	    } else if (document.mozCancelFullScreen) {
-	      document.mozCancelFullScreen();
-	    } else if (document.webkitCancelFullScreen) {
-	      document.webkitCancelFullScreen();
-	    }
-	  }
-	}
-
 	reposition() {
 		const orientation = Screen.orientation;
 		const config = Meow.cache.getJSON(orientation)['panel'];
@@ -111,8 +84,5 @@ export default class Panel {
 
 		this._info.x = config.info.x;
 		this._info.y = config.info.y;
-
-		this._fullScreenButton.x = config.fullScreen.x;
-		this._fullScreenButton.y = config.fullScreen.y;
 	}
 }

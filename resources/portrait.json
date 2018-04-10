@@ -8,8 +8,8 @@
 	},
 
 	"score": {
-		"currentText": {"x": 360, "y": 85},
-		"multiplierText": {"x":360, "y": 165}
+		"currentText": {"x": 360, "y": 90},
+		"multiplierText": {"x":360, "y": 170}
 	},
 
 	"panel": {
